@@ -10,3 +10,20 @@ struct Individual {
     int rows[N];
     int score;
 };
+class GeneticOperations {
+private:
+    int seed = 37;
+
+    // مولد أرقام شبه عشوائي يدوي
+    int myRandom(int limit) {
+        seed = (seed * 17 + 11) % 100;
+        return seed % limit;
+    }
+
+    // قيمة مطلقة يدوية
+    int absoluteValue(int value) {
+        if (value < 0) {
+            return -value;
+        }
+        return value;
+    }
