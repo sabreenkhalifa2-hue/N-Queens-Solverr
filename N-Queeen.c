@@ -128,3 +128,18 @@ private:
         return child;
     }
 
+ 
+    void mutate(Individual &ind) {
+
+        for (int i = 0; i < N; i++) {
+
+            int r = myRandom(100);
+
+            if (r < 5) {
+                ind.rows[i] = 1 + myRandom(N);
+            }
+        }
+
+        ind.score = calculateScore(ind.rows);
+    }
+};
