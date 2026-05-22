@@ -27,3 +27,27 @@ private:
         }
         return value;
     }
+    public:
+
+    int calculateScore(int rows[N]) {
+        int maxPairs = N * (N - 1) / 2;
+        int conflicts = 0;
+
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+
+                if (rows[i] == rows[j]) {
+                    conflicts++;
+                    continue;
+                }
+                int row_diff = absoluteValue(rows[i] - rows[j]);
+                int col_diff = absoluteValue(i - j);
+
+                if (row_diff == col_diff) {
+                    conflicts++;
+                }
+            }
+        }
+
+        return maxPairs - conflicts;
+    }
