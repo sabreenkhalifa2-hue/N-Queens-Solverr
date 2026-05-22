@@ -143,3 +143,32 @@ private:
         ind.score = calculateScore(ind.rows);
     }
 };
+class BoardPrinter {
+public:
+
+    void print(int rows[N]) {
+
+        for (int row = 1; row <= N; row++) {
+
+            cout << "  |";
+
+            for (int col = 0; col < N; col++) {
+
+                if (rows[col] == row) {
+                    cout << " Q |";
+                }
+                else {
+                    cout << " . |";
+                }
+            }
+
+            cout << "\n";
+        }
+
+        for (int i = 0; i < N * 4 + 3; i++) {
+            cout << "-";
+        }
+
+        cout << "\n";
+    }
+};
