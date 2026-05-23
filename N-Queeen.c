@@ -251,3 +251,33 @@ public:
         }
     }
 };
+int main() {
+    // تثبيت الرقم داخل srand بديل لدالة الوقت،  يعطيك عشوائية ثابتة
+    srand(42);
+
+    QueensSolver solver;
+    int methodChoice;
+    int cases[5][N];
+
+    cout << "N-Queens Solver using Genetic Algorithm\n";
+    cout << "1: Roulette"<<endl;
+    cout << "2: Tournament"<<endl;
+    cout << "Select Selection Method:";
+    cin >> methodChoice;
+
+    cout << "\nEnter 5 test cases (8 numbers each):\n";
+    for (int i = 0; i < 5; i++) {
+        cout << "Enter case " << i + 1 << ": ";
+        for (int j = 0; j < N; j++) {
+            cin >> cases[i][j];
+        }
+    }
+
+    // تشغيل الحالات الخمسة عبر الـ Solver
+    for (int i = 0; i < 5; i++) {
+        solver.solve(cases[i], i + 1, methodChoice);
+    }
+
+    cout << "Done!\n";
+    return 0;
+}
