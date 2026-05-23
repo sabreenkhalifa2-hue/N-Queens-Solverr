@@ -172,3 +172,82 @@ public:
         cout << "\n";
     }
 };
+class QueensSolver {
+private:
+    GeneticOperations op;
+    BoardPrinter printer;
+
+    int findBestIndex(Individual pop[max_solutions]) {
+        int best = 0;
+        for (int i = 1; i < max_solutions; i++) {
+            if (pop[i].score > pop[best].score) best = i;
+        }
+        return best;
+    }
+
+public:
+    void solve(int initialState[N], int caseNum, int methodChoice) {
+        int target = 28;
+        Individual pop[max_solutions];
+
+        // وضع الحالة الابتدائية كأول عنصر
+        for (int i = 0; i < N; i++) pop[0].rows[i] = initialState[i];
+        pop[0].score = op.calculateScore(pop[0].rows);
+
+        // توليد بقية الجيل عشوائياً
+        for (int i = 1; i < max_solutions; i++) pop[i] = op.createRandom();
+
+        Individual bestEver = pop[findBestIndex(pop)];
+        int scoreHistory[change];
+        int generationsUsed = change;
+
+        // حلقة الأجيال
+        for (int gen = 0; gen < change; gen++) {
+            int bestIdx = findBestIndex(pop);
+            if (pop[bestIdx].score > bestEver.score) bestEver = pop[bestIdx];
+
+            scoreHistory[gen] = bestEver.score;
+
+            if (bestEver.score == target) {
+                generationsUsed = gen + 1;
+                break;
+            }
+
+            Individual newPop[max_solutions];
+            newPop[0] = pop[bestIdx]; // الحفاظ على الأفضل (Elitism)
+
+            for (int i = 1; i < max_solutions; i++) {
+                Individual p1, p2;
+                if (methodChoice == 1) {
+                    p1 = op.rouletteSelection(pop);
+                    p2 = op.rouletteSelection(pop);
+                } else {
+                    p1 = op.tournamentSelection(pop);
+                    p2 = op.tournamentSelection(pop);
+                }
+
+                Individual child = op.crossover(p1, p2);
+                op.mutate(child);
+                newPop[i] = child;
+            }
+
+            for (int i = 0; i < max_solutions; i++) pop[i] = newPop[i];
+        }
+
+        // طباعة مخرجات واضحة وبسيطة
+        cout << "#  Test Case " << caseNum << "\n";
+        cout << "Status        : " << (bestEver.score == target ? "SOLVED" : "NOT SOLVED") << "\n";
+        cout << "Best score    : " << bestEver.score << " / " << target << "\n";
+        cout << "Generations   : " << generationsUsed << "\n";
+        cout << "Best solution : [";
+        for (int i = 0; i < N; i++) cout << bestEver.rows[i] << (i < N - 1 ? "," : "");
+        cout << "]\n\nBoard:\n";
+        printer.print(bestEver.rows);
+
+        cout << "\nScore progress (first 5 generations):\n";
+        int limit = (generationsUsed < 5) ? generationsUsed : 5;
+        for (int i = 0; i < limit; i++) {
+            cout << "  Gen " << (i + 1) << "  ->  score = " << scoreHistory[i] << "\n";
+        }
+    }
+};
